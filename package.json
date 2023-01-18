@@ -1,0 +1,26 @@
+{
+  "name": "ad320",
+  "version": "1.0.0",
+  "description": "Classwork for AD320 - Web Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Exochos/AD320-2023.git"
+  },
+  "keywords": [
+    "AD320",
+    "Web",
+    "Application",
+    "REACT",
+    "npm"
+  ],
+  "author": "Jeremy Ward",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Exochos/AD320-2023/issues"
+  },
+  "homepage": "https://github.com/Exochos/AD320-2023#readme"
+}
