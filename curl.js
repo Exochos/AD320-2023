@@ -1,52 +1,49 @@
-import fetch from 'node-fetch';
+import {MongoClient} from 'mongodb';
 import * as dotenv from 'dotenv';
 
+// Load environment variables from .env file
 dotenv.config();
-const url = 'https://data.mongodb-api.com/app/data-vucnh/endpoint/data/v1/action/find';
-let data;
+const uri = process.env.MONGODB_URI;
+const database = process.env.MONGODB_DB;
+const collection = process.env.MONGODB_COLLECTION;
 
-const options = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Request-Headers': '*',
-    'api-key': process.env.API_KEY,
-  },
-  body: JSON.stringify({
-    collection: 'listingsAndReviews',
-    database: 'sample_airbnb',
-    dataSource: 'Cluster0',
-    filter: {property_type: 'Apartment'},
-    projection: {
-      _id: 0,
-      name: 1,
-      summary: 1,
-      property_type: 1,
-      cancellation_policy: 1,
-    },
-  },
-  ),
+// Define the query filter
+const projection = {
+  _id: 0,
+  name: 1,
+  summary: 1,
+  property_type: 1,
+  cancellation_policy: 1,
 };
+
 
 /**
  * Get data from sample_airbnb database
- * @return {object} data
- * @return {string} data.name
- * @return {string} data.summary
- * @return {string} data.property_type
- * @return {string} data.cancellation_policy
+ * replicating findOne() from MongoDB API
+ * @param {string} collection
+ * @param {database} database
+ * @param {object} filter
+ * @param {object} projection
  */
-function getData() {
-  fetch(url, options)
-      .then((res) => res.json())
-      .then((json) => {
-        data = json;
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  return data;
+async function findOne(collection, database, filter, projection) {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    console.log('Connected to database');
+    const db = client.db(database);
+    const results = await db.collection(collection)
+        .find(filter, projection)
+        .limit(1)
+        .toArray();
+    return results;
+  } finally {
+    await client.close();
+  }
 }
 
-getData();
+// Example query
+const filter = {property_type: 'Apartment'};
+// Call the function
+const results = await findOne(collection, database, filter, projection);
+// Print the results
+console.log(results);
