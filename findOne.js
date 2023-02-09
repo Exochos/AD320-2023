@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 const uri = process.env.MONGODB_URI;
+
+// Define the database and collection
 const database = process.env.MONGODB_DB;
 const collection = process.env.MONGODB_COLLECTION;
 
@@ -41,6 +43,8 @@ async function findOne(collection, database, filter, projection) {
         .toArray();
     // Return the results
     return results;
+   } catch (error) {
+    console.error(error);
   } finally {
     // Close the connection to the MongoDB cluster
     await client.close();
